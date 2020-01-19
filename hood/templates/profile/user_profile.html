@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4" style="margin-top: 7%;">
+            <div class="card" id="prof-card">
+                <img src="{{profile.profpic.url}}" class="img-rounded" alt="" id="prof-pic">
+                <div class="card-body" id="pro-body">
+                    <p>Name: {{profile.username}}</p>
+                    <p>Bio: {{profile.description|safe}}</p>
+                    <p>Email: {{profile.email}}</p>
+                    <p>Neighbourhood: {{profile.neighbourhood}}</p>
+                    <a class="nav-link" href="{% url 'update-profile' %}" id="edit-btn">Edit Profile</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+</div>
+
+
+{% endblock %}
