@@ -122,35 +122,3 @@ def user_dashboard(request):
         function for displaying dashboard
     """
     return render(request, 'dashboard.html')
-
-@login_required()
-def registered_users(request):
-    """
-        Function for displaying registerd users
-    """
-    users = User.objects.all()
-    context = {
-        'users': users
-    }
-    return render(request, 'users.html', context)
-
-@login_required()
-def user_deactivate(request, user_id):
-    """
-        Function for deactivating users 
-    """
-    user = User.objects.get(pk=user_id)
-    user.is_active = False
-    user.save()
-    messages.success(request, "User account has been successfully deactivated!")
-    return redirect('system_users')
-@login_required()
-def user_activate(request, user_id):
-    """
-        Function for activating users 
-    """
-    user = User.objects.get(pk=user_id)
-    user.is_active = True
-    user.save()
-    messages.success(request, "User account has been successfully activated!")
-    return redirect('system_users')
