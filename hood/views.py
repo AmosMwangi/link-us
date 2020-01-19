@@ -1,12 +1,11 @@
 from django.shortcuts import render,redirect
-from django.http import HttpResponse,Http404,HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ObjectDoesNotExist
-from .forms import *
 from django.contrib.auth.forms import UserCreationForm
+from .models import *
 from django.contrib.auth import login, authenticate
 from django.urls import reverse_lazy
 from django.views import generic
+from .forms import *
 from django.views.generic import CreateView, ListView
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -21,43 +20,15 @@ class SignUp(generic.CreateView):
     form_class = UserCreationForm
     success_url = reverse_lazy('Index')
     template_name = 'registration/register.html'
-
-def index(request):
-    """
-        Home view on login
-    """
-    try:
-        if not request.user.is_authenticated:
-            return redirect('/accounts/login/')
-        current_user=request.user
-        profile =Profile.objects.get(username=current_user)
-    except ObjectDoesNotExist:
-        return redirect('create-profile')
-    return render(request,'index.html')
-
-
-
-@login_required(login_url='/accounts/login/')
     
-def my_profile(request):
-    """
-        Admin's profile view function
-    """
-    current_user=request.user
-    profile =Profile.objects.get(username=current_user)
-    return render(request,'profile/user_profile.html',{"profile":profile})
+class HomePageView(LoginRequiredMixin, ListView):
+    template_name = "home.html"
+    context_object_name = "posts"
+    ordering = ["-date_posted"]
 
 
-@login_required(login_url='/accounts/login/')
-def user_profile(request,username):
-    """
-        Profile view function
-    """
-    user = User.objects.get(username=username)
-    profile =Profile.objects.get(username=user)
-
-@login_required(login_url='/accounts/login/')
-def create_profile(request):
+@login_required()
+def profile(request):
     """
         Function for creating profile
     """
@@ -71,32 +42,15 @@ def create_profile(request):
         return HttpResponseRedirect('/')
     else:
         form = ProfileForm()
-        return render(request,'profile/profile_form.html',{"form":form})
+        return render(request,'profile.html',{"form":form})
     
 
-@login_required(login_url='/accounts/login/')
-def update_profile(request):
-    """
-        Function for updating profile
-    """
-    current_user=request.user
-    if request.method=="POST":
-        instance = Profile.objects.get(username=current_user)
-        form =UpdateprofileForm(request.POST,request.FILES,instance=instance)
-        if form.is_valid():
-            profile = form.save(commit = False)
-            profile.username = current_user
-            profile.save()
+class UpdateProfileView(UpdateView):
+    model = Post
+    form_class = PostForm
+    template_name = "profile.html"
+    success_url = reverse_lazy("home")
 
-        return redirect('Index')
-
-    elif Profile.objects.get(username=current_user):
-        profile = Profile.objects.get(username=current_user)
-        form = UpdateprofileForm(instance=profile)
-    else:
-        form = UpdateprofileForm()
-
-    return render(request,'profile/update_profile.html',{"form":form})
 
 class BlogPageView(LoginRequiredMixin, ListView):
     """
@@ -108,32 +62,6 @@ class BlogPageView(LoginRequiredMixin, ListView):
     ordering = ["-date_posted"]
 
 
-@login_required(login_url='/accounts/login/')
-def new_blogpost(request):
-    """
-        Function for creating new blog
-    """
-    current_user=request.user
-    profile =Profile.objects.get(username=current_user)
-
-    if request.method=="POST":
-        form =BlogPostForm(request.POST,request.FILES)
-        if form.is_valid():
-            blogpost = form.save(commit = False)
-            blogpost.username = current_user
-            blogpost.neighbourhood = profile.neighbourhood
-            blogpost.profpic = profile.profpic
-            blogpost.save()
-
-        return HttpResponseRedirect('/blog')
-
-    else:
-        form = BlogPostForm()
-
-    return render(request,'posts/blogpost_form.html',{"form":form})
-
-
-
 class EducationView(LoginRequiredMixin, ListView):
     """
         Function for displaying education page
@@ -143,26 +71,7 @@ class EducationView(LoginRequiredMixin, ListView):
     context_object_name = "educations"
     ordering = ["-date_posted"]
 
-@login_required(login_url='/accounts/login/')
-def new_education(request):
-    """
-        Function for creating new education post
-    """
-    current_user=request.user
-    profile =Profile.objects.get(username=current_user)
 
-    if request.method=="POST":
-        form =EducationForm(request.POST,request.FILES)
-        if form.is_valid():
-            education = form.save(commit = False)
-            education.owner = current_user
-            education.neighbourhood = profile.neighbourhood
-            education.save()
-        return HttpResponseRedirect('/education')
-
-    else:
-        form = EducationForm()
-    return render(request,'posts/education_form.html',{"form":form})
 
 class BusinessView(LoginRequiredMixin, ListView):
     """
@@ -172,29 +81,6 @@ class BusinessView(LoginRequiredMixin, ListView):
     template_name = "posts/businesses.html"
     context_object_name = "businesses"
     ordering = ["-date_posted"]
-    
-@login_required(login_url='/accounts/login/')
-def new_business(request):
-    """
-        Function for creating business post
-    """
-    current_user=request.user
-    profile =Profile.objects.get(username=current_user)
-
-    if request.method=="POST":
-        form =BusinessForm(request.POST,request.FILES)
-        if form.is_valid():
-            business = form.save(commit = False)
-            business.owner = current_user
-            business.neighbourhood = profile.neighbourhood
-            business.save()
-
-        return HttpResponseRedirect('/businesses')
-
-    else:
-        form = BusinessForm()
-
-    return render(request,'posts/business_form.html',{"form":form})
 
 
 
@@ -209,32 +95,7 @@ class AuthorityView(LoginRequiredMixin, ListView):
     ordering = ["-date_posted"]
 
 
-@login_required(login_url='/accounts/login/')
-def new_authority(request):
-    """
-        Function for creating security
-    """
-    current_user=request.user
-    profile =Profile.objects.get(username=current_user)
-
-    if request.method=="POST":
-        form =AuthorityForm(request.POST,request.FILES)
-        if form.is_valid():
-            authority = form.save(commit = False)
-            authority.username = current_user
-            authority.neighbourhood = profile.neighbourhood
-            authority.profpic = profile.profpic
-            authority.save()
-
-        return HttpResponseRedirect('/')
-
-    else:
-        form = AuthorityForm()
-
-    return render(request,'posts/authority_form.html',{"form":form})
-
-
-@login_required(login_url='/accounts/login/')
+@login_required()
 
 def search_results(request):
     """
