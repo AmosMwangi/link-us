@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load staticfiles %}
+{% load bootstrap4 %}
+
+
+
+{% block content %}
+
+<div class="container">
+    <a href="{% url 'new-blogpost' %}" id="post"><i class="fa fa-plus" aria-hidden="true"></i></a>
+    <div class="row">
+        <div class="col-md-12 top-div" style="margin-top:40px;"></div>
+    </div>
+
+    <div class="row">
+        {% for blog in blogposts %}
+        <div class="col-md-12" style="margin-bottom: 5%;">
+            <div class="card" id="card-blog">
+                <img class="card-img-top" src="{{blog.image.url}}" >
+                <div class="card-body">
+                    <h5 class="card-title">{{blog.title}}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{blog.username}}</h6>
+                    <p class="card-text">{{blog.post|truncatechars:150 | safe}}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+
+
+
+{% endblock %}
