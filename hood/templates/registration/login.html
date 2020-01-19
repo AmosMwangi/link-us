@@ -1,0 +1,68 @@
+{% extends "registration/base.html" %}
+{% load bootstrap4 %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <!-- Empty div -->
+
+        <div class="col-md-4 phone-section">
+        </div>
+
+
+
+        <div class="col-md-4 form-section">
+
+            {% if form.errors %}
+            <p>Password or Username is incorrect</p>
+            {% endif %}
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    
+                    <input type="text" class="form-control" name="username" aria-describedby="emailHelp"
+                        placeholder="Enter username" required>
+                </div>
+                <div class="form-group">
+                    
+                    <input type="password" class="form-control" name="password" id="exampleInputPassword1"
+                        placeholder="Password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+
+            <div class="panel panel-default">
+                <div class="panel-body text-center">
+                    <p> Don't have an account? <span><a class="" href="{% url 'register' %}">Sign Up</a></span></p>
+                </div>
+            </div>
+
+        </div>
+        <!-- Empty div -->
+        <div class="col-md-4"></div>
+    </div>
+
+</div>
+
+<!-- <style>
+    .panel {
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)) fixed;
+    }
+
+    p,
+    label,
+    a {
+        color: white;
+        font-size: 15px;
+    }
+
+    .panel-default {
+        border-color: inherit;
+    }
+
+    input {
+        text-align: center;
+    }
+</style> -->
+{% endblock %}
