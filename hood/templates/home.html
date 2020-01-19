@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% block content %}
+{{ block.super }}
+
+<div class="container">
+    <div class="row" style="margin-top: 17%;">
+        <div class="col-md-6">
+            <div class="card" id="body">
+                <div class="card-body">
+                    <h4>Education</h4>
+                    <a class="dropdown-item" href="{% url 'education'%}" id="btn-view">view</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h4>Business</h4>
+                    <a class="dropdown-item" href="{% url 'businesses'%}" id="btn-view">view</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h4>Authorities</h4>
+                    <a class="dropdown-item" href="{% url 'authorities'%}" id="btn-view">view</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h4>Blogs</h4>
+                    <a class="dropdown-item" href="{% url 'blog'%}" id="btn-view">view</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+{% endblock %}
