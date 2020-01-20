@@ -2,15 +2,12 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
-
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    {% if title %}
-    <title>{{title}}</title>
-    {% else %}
-    <title>Neighbourhood - All the Neighbours</title>
-    {% endif %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Hood</title>
 
     {% block styles %}
     {% bootstrap_css %}
@@ -28,36 +25,8 @@
 
 <body>
     {% include 'navbar.html' %}
+    
     {% block content %}
-
-    {% endblock %}
-
-    {% block dashboard %}
-    <div class="container">
-        <div class="row">
-            <br>
-            <br>
-        </div>
-        <div class="row">
-            <div class="col-md-6 offset-3">
-                {% if form.errors %}
-                {% for field in form %}
-                {% for error in field.errors %}
-                <div class="alert alert-danger">
-                    <strong>{{ error|escape }}</strong>
-                </div>
-                {% endfor %}
-                {% endfor %}
-                {% for error in form.non_field_errors %}
-                <div class="alert alert-danger">
-                    <strong>{{ error|escape }}</strong>
-                </div>
-                {% endfor %}
-                {% endif %}
-
-            </div>
-        </div>
-    </div>
     {% endblock %}
 
     {% block scripts %}
@@ -65,9 +34,7 @@
     <script>
         new WOW().init();
     </script>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     {% bootstrap_javascript %}
     {% endblock %}
 </body>
