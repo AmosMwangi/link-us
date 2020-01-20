@@ -1,6 +1,6 @@
-from django.shortcuts import render,redirect
-from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
 from .models import *
 from django.contrib.auth import login, authenticate
 from django.urls import reverse_lazy
@@ -22,6 +22,9 @@ class SignUp(generic.CreateView):
     template_name = 'registration/register.html'
     
 class HomePageView(LoginRequiredMixin, ListView):
+    """
+        Function to display home page
+    """
     template_name = "home.html"
     context_object_name = "posts"
     ordering = ["-date_posted"]
@@ -46,6 +49,9 @@ def profile(request):
     
 
 class UpdateProfileView(UpdateView):
+    """
+        Function for updating profile
+    """
     model = Post
     form_class = PostForm
     template_name = "profile.html"
